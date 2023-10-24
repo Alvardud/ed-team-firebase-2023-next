@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Paper, Typography, TextField, Button, Grid, Box } from '@mui/material';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 function LoginPage() {
   const router = useRouter()
