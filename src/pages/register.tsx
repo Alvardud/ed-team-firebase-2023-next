@@ -7,6 +7,8 @@ function UserRegistration() {
     lastName: '',
     age: '',
     profession: '',
+    email: '',
+    password: '',
   });
 
   const handleChange = (e:any) => {
@@ -47,11 +49,29 @@ function UserRegistration() {
           />
           <TextField
             fullWidth
-            label="Edad"
+            label="Nombres"
             variant="outlined"
             margin="normal"
-            name="age"
-            value={userData.age}
+            name="firstName"
+            value={userData.firstName}
+            onChange={handleChange}
+          />
+          <TextField
+            fullWidth
+            label="Correo"
+            variant="outlined"
+            margin="normal"
+            name="email"
+            value={userData.email}
+            onChange={handleChange}
+          />
+          <TextField
+            fullWidth
+            label="Contrasena"
+            variant="outlined"
+            margin="normal"
+            name="password"
+            value={userData.password}
             onChange={handleChange}
           />
           <TextField
