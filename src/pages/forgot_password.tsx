@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { Container, Paper, Typography, TextField, Button } from '@mui/material';
+import { getAuth } from 'firebase/auth';
+import app from '../../firebase/config';
+import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth'
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (e:any) => {
+  const auth = getAuth(app)
+  const [sendEmailRemember, loadingSEM, errorSEM] = useSendPasswordResetEmail(auth)
+
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
-    // Aquí puedes manejar el envío de datos, como enviar un correo de restablecimiento de contraseña.
+    await sendEmailRemember(email)
     console.log('Se envió una solicitud de restablecimiento de contraseña para:', email);
   };
 

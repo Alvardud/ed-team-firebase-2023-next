@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Container, Paper, Typography, TextField, List, ListItem, ListItemText } from '@mui/material';
 import { useRouter } from 'next/router';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { collection, getFirestore } from 'firebase/firestore';
+import app from '../../firebase/config';
 
 function ChatList() {
+    const [usuarios, loading, error] = useCollection(collection(getFirestore(app), 'usuarios'))
     const router = useRouter()
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -31,15 +35,15 @@ function ChatList() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <List>
-                    {filteredChats.map(chat => (
-                        <ListItem key={chat.id} onClick={() => {
-                            router.push('/chat/id')
+                {usuarios && (<List>
+                    {usuarios.docs.map((chat: any, index) => (
+                        <ListItem key={index} onClick={() => {
+                            router.push(`/chat/${chat.id}`)
                         }}>
-                            <ListItemText primary={chat.name} />
+                            <ListItemText>{chat.data()['nombre']}</ListItemText>
                         </ListItem>
                     ))}
-                </List>
+                </List>)}
             </Paper>
         </Container>
     );

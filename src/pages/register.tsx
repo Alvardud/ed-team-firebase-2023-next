@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { Container, Paper, Typography, TextField, Button } from '@mui/material';
+import { getAuth, sendEmailVerification } from 'firebase/auth';
+import app from '../../firebase/config';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { doc, getFirestore, setDoc } from 'firebase/firestore';
 
 function UserRegistration() {
+  const auth = getAuth(app)
+  const [createUserWithEmailPassword, user, loading, error]
+    = useCreateUserWithEmailAndPassword(auth)
+
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
@@ -11,14 +19,25 @@ function UserRegistration() {
     password: '',
   });
 
-  const handleChange = (e:any) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    
+    const response = await createUserWithEmailPassword(userData.email, userData.password);
+    //Agregar datos en firestore
+    const db = getFirestore(app)
+    await setDoc(doc(db, 'usuarios', response!.user.uid), {
+      "apellidos": userData.lastName,
+      "nombre": userData.firstName,
+      "edad": Number(userData.age),
+      "profesion": userData.profession
+    });
+    if (response?.user !== null) {
+      await sendEmailVerification(response!.user)
+    }
     console.log(userData);
   };
 
@@ -49,11 +68,11 @@ function UserRegistration() {
           />
           <TextField
             fullWidth
-            label="Nombres"
+            label="Edad"
             variant="outlined"
             margin="normal"
-            name="firstName"
-            value={userData.firstName}
+            name="age"
+            value={userData.age}
             onChange={handleChange}
           />
           <TextField

@@ -18,6 +18,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const analytics = getAnalytics(app);
 
+let analytics
+if (app.name && typeof window !== 'undefined') {
+  analytics = getAnalytics(app);
+}
+
+export {analytics}
 export default app

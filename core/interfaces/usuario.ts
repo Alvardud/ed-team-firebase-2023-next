@@ -3,4 +3,5 @@ type Usuario = {
     apellidos: String
     edad: number
     profesion: String
+    id: String
 }
